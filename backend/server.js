@@ -3,6 +3,7 @@ import dotenv from 'dotenv' //to change this from require syntax we have to add 
 import connectDB from './config/db.js'
 import colors from 'colors'
 import productRoutes from './routes/productRoutes.js'
+import { notFound, errorHandler } from './middleware/errorMiddleware.js'
 
 dotenv.config() //activate .env
 
@@ -15,6 +16,12 @@ app.get('/' , (req,res) => {
 })
 
 app.use('/api/products', productRoutes) //if the link has /api/products then we have to use the productRoutes.
+
+//custom page not found error handling
+app.use(notFound)
+
+//custom error handling during wrong request
+app.use(errorHandler)
 
 const port  = process.env.PORT || 1234
 app.listen(1234, console.log(`${process.env.MODE} server running on port ${port}!`.yellow.bold))
